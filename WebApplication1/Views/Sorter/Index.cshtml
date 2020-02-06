@@ -1,0 +1,56 @@
+﻿@model WebApplication1.Models.SorterModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Sorter</h2>
+
+<br>
+<div class="row">
+    <div class="col-md-6">
+        <button type="button" class="btn btn-success" id="btnGetData">Proceed to Sort</button>        
+        <button type="button" class="btn btn-info" id="btnClear">Clear Field</button>
+    </div>       
+</div>
+
+<div id="result">
+  
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#result").hide();
+        });
+
+        $("#btnGetData").on("click", function () {
+               $.ajax({
+                type: "POST",
+                url: "/Sorter/ProceedFile",                   
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {                       
+                    if (result.Status) {
+                        $("#result").show();
+                        var collection = result.Result;                                            
+                      
+                        for(var i = 0; i < collection.length; i++) {                            
+                           collection[i] = collection[i] + "<br>";
+                        }
+
+                        collection = collection.join('');
+                        document.getElementById("result").innerHTML = collection;
+                    }
+                },
+                   
+            });         
+        });     
+        
+        $("#btnClear").on("click", function () {
+            console.log("test");
+            $("#result").html("");
+            $("#result").hide();
+             
+        });
+         
+    </script>
+}
